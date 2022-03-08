@@ -5,9 +5,10 @@
 - [2. JavaScript 执行线程图解](js_execution_threads.md)
 
 ### 未来技术方向
-
 - [Serverless](R&D_model_upgrade_of_FE_base_on_Serverless.md)
 - [about webGPU](webGPU.md)
+- [别再抱怨 Wasm 能力有限了,Host Function 用起来呀](wasm_hotFn.md)
+
 ### about how to use sth
 [python3_install_mac](./python3_install_mac.md)<br/>
 [homebrew_install_mac](./install_homebrew_mac.md)
