@@ -62,6 +62,51 @@
     }
 
     func main(){
-      vm :=
+      vm := wasmedge.NewVM()
+
+      // 使用默认名称 env 构建导入段对象
+      obj := wasmedge.NewImportObject("env")
+
+      // 构建 Host Function 的参数和返回值类型
+      funcAddType := wasmedge.NewFunctionType(
+        []wasmedge.ValType{
+          wasmedge.ValType_I32,
+          wasmedge.ValType_I32,
+        },
+        []wasmedge.ValType{
+          wasmedge.ValType_I32,
+        }
+      ),
+
+      hostAdd := wasmedge.NewFunction(funcAddType, add, nil, 0)
+
+      // 将 Host Function 加入到导入段对象中
+      // 注意第一个参数  `add` 时 rust 中定义的外部函数的名称
+      obj.AddFunction("add",hostAdd)
+
+      // 注册导入段对象
+      vm.RegisterImport(obj)
+
+      // 加载，验证并实例化 wasm 程序
+      vm.LoadWasmFile(os.Args[1])
+      vm.Validate()
+      vm.Instantiate()
+
+      // 执行 wasm 导出的函数并取得返回值
+      r, _ := vm.Execute("run")
+      fmt.Printf("%d",r[0].(int32))
+
+      obj.Release()
+      vm.Release()
     }
   ```
+  - 编译并执行
+     ```go
+      go build
+      ./hostfunc rust_host_func.wasm
+     ```
+     程序输出： 3
+
+### 说明
+  你可能已经看出来了, 要在 Host Function 里传递 string/bytes, 实际是通过传递这段 数据 所在内存指针和长度来实现的.
+  文章中的案例二引入的是 string， 使用逻辑如出一辙，只不过具体方法不太一样。具体内容文章里有。

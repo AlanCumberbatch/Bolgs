@@ -11,4 +11,4 @@
 
 ### about how to use sth
 [python3_install_mac](./python3_install_mac.md)<br/>
-[homebrew_install_mac](./install_homebrew_mac.md)
+[homebrew_install_mac](./install_homebrew_mac.md
